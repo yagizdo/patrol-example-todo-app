@@ -12,14 +12,33 @@ class TodoList extends StatelessWidget {
       padding: EdgeInsets.zero,
       itemCount: todos.length,
       itemBuilder: (context, index) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(todos[index].title),
-            Text(todos[index].description),
-          ],
+        return _TodoItem(
+          todo: todos[index],
         );
       },
+    );
+  }
+}
+
+class _TodoItem extends StatelessWidget {
+  const _TodoItem({required this.todo});
+
+  final Todo todo;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          todo.title,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        Text(
+          todo.description,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      ],
     );
   }
 }
