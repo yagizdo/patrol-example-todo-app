@@ -27,18 +27,30 @@ class _TodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          todo.title,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        Text(
-          todo.description,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-      ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            todo.title,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+          ),
+          const SizedBox(height: 8.0),
+          Text(
+            todo.description,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(),
+          ),
+        ],
+      ),
     );
   }
 }
