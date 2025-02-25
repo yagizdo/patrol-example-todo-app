@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../models/todo_model.dart';
 import '../cubit/todo_cubit.dart';
@@ -35,6 +36,31 @@ class _TodoItem extends StatelessWidget {
     );
   }
 
+  void _showDeleteConfirmation(BuildContext context) {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: const Text('Delete Todo'),
+        content: const Text('Are you sure you want to delete this todo?'),
+        actions: [
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              context.read<TodoCubit>().deleteTodo(todo.id);
+              Navigator.pop(context);
+            },
+            child: const Text('Delete'),
+          ),
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -55,9 +81,7 @@ class _TodoItem extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: () {
-              context.read<TodoCubit>().deleteTodo(todo.id);
-            },
+            onPressed: () => _showDeleteConfirmation(context),
           ),
         ],
       ),
