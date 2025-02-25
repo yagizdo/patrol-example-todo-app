@@ -1,19 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:patrol_example_todo/models/todo_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../models/todo_model.dart';
+import '../cubit/todo_cubit.dart';
 
 class TodoList extends StatelessWidget {
-  const TodoList({super.key, required this.todos});
-
   final List<Todo> todos;
+
+  const TodoList({super.key, required this.todos});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.zero,
       itemCount: todos.length,
       itemBuilder: (context, index) {
-        return _TodoItem(
-          todo: todos[index],
+        final todo = todos[index];
+        return ListTile(
+          title: Text(todo.title),
+          subtitle: Text(todo.description),
+          leading: Checkbox(
+            value: todo.isCompleted,
+            onChanged: (_) {
+              context.read<TodoCubit>().toggleTodoStatus(todo.id);
+            },
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  context.read<TodoCubit>().editTodo(
+                        todo.copyWith(
+                          title: 'Updated Title',
+                          description: todo.description,
+                        ),
+                      );
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  context.read<TodoCubit>().deleteTodo(todo.id);
+                },
+              ),
+            ],
+          ),
         );
       },
     );
