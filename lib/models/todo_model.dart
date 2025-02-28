@@ -24,6 +24,34 @@ class TodoResponse extends Equatable {
       limit: json['limit'],
     );
   }
+
+  factory TodoResponse.mock() {
+    return TodoResponse(
+      todos: [
+        Todo(
+          id: '1',
+          todo: 'Buy milk',
+          userId: 1,
+          isCompleted: false,
+        ),
+        Todo(
+          id: '2',
+          todo: 'Buy bread',
+          userId: 1,
+          isCompleted: true,
+        ),
+        Todo(
+          id: '3',
+          todo: 'Buy eggs',
+          userId: 1,
+          isCompleted: false,
+        ),
+      ],
+      total: 3,
+      skip: 0,
+      limit: 3,
+    );
+  }
 }
 
 class Todo extends Equatable {
