@@ -31,9 +31,9 @@ class TodoState extends Equatable {
 }
 
 class TodoCubit extends Cubit<TodoState> {
-  TodoCubit() : super(const TodoState());
+  TodoCubit({required this.todoRepo}) : super(const TodoState());
 
-  final TodoRepo todoRepo = TodoRepo();
+  final TodoRepo todoRepo;
 
   Future<void> getTodos() async {
     emit(state.copyWith(isLoading: true));
