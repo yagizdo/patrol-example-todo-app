@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:patrol_example_todo/features/home/widgets/todo_list.dart';
-import 'package:patrol_example_todo/models/todo_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/todo_cubit.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<TodoCubit>().getTodos();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +43,14 @@ class HomeView extends StatelessWidget {
 
   void _showAddTodoDialog(BuildContext context) {
     // Show dialog to add new todo
-    context.read<TodoCubit>().addTodo(
-          Todo(
-            id: DateTime.now().toString(),
-            title: 'New Todo',
-            description: '',
-            isCompleted: false,
-          ),
-        );
+    //   context.read<TodoCubit>().addTodo(
+    //         Todo(
+    //           id: DateTime.now().toString(),
+    //           todo: 'New Todo',
+    //           userId: 1,
+    //           isCompleted: false,
+    //         ),
+    //       );
+    // }
   }
 }

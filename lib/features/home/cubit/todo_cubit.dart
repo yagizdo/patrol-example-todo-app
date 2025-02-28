@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:patrol_example_todo/features/home/repo/todo_repo.dart';
 import '../../../models/todo_model.dart';
 
 class TodoState extends Equatable {
@@ -32,36 +33,15 @@ class TodoState extends Equatable {
 class TodoCubit extends Cubit<TodoState> {
   TodoCubit() : super(const TodoState());
 
-  void addTodo(Todo todo) {
-    final currentTodos = [...state.todos];
-    currentTodos.add(todo);
-    emit(state.copyWith(todos: currentTodos));
-  }
+  final TodoRepo todoRepo = TodoRepo();
 
-  void deleteTodo(String id) {
-    final currentTodos = [...state.todos];
-    currentTodos.removeWhere((todo) => todo.id == id);
-    emit(state.copyWith(todos: currentTodos));
-  }
-
-  void editTodo(Todo updatedTodo) {
-    final currentTodos = [...state.todos];
-    final todoIndex =
-        currentTodos.indexWhere((todo) => todo.id == updatedTodo.id);
-    if (todoIndex != -1) {
-      currentTodos[todoIndex] = updatedTodo;
-      emit(state.copyWith(todos: currentTodos));
-    }
-  }
-
-  void toggleTodoStatus(String id) {
-    final currentTodos = [...state.todos];
-    final todoIndex = currentTodos.indexWhere((todo) => todo.id == id);
-    if (todoIndex != -1) {
-      currentTodos[todoIndex] = currentTodos[todoIndex].copyWith(
-        isCompleted: !currentTodos[todoIndex].isCompleted,
-      );
-      emit(state.copyWith(todos: currentTodos));
+  Future<void> getTodos() async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      final todos = await todoRepo.getTodos();
+      emit(state.copyWith(todos: todos, isLoading: false));
+    } catch (e) {
+      emit(state.copyWith(error: e.toString(), isLoading: false));
     }
   }
 }

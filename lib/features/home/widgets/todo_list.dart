@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../models/todo_model.dart';
-import '../cubit/todo_cubit.dart';
 import './edit_todo_bottom_sheet.dart';
 
 class TodoList extends StatelessWidget {
@@ -46,7 +44,6 @@ class _TodoItem extends StatelessWidget {
           CupertinoDialogAction(
             isDestructiveAction: true,
             onPressed: () {
-              context.read<TodoCubit>().deleteTodo(todo.id);
               Navigator.pop(context);
             },
             child: const Text('Delete'),
@@ -64,13 +61,10 @@ class _TodoItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(todo.title),
-      subtitle: Text(todo.description),
+      title: Text(todo.todo),
       leading: Checkbox(
         value: todo.isCompleted,
-        onChanged: (_) {
-          context.read<TodoCubit>().toggleTodoStatus(todo.id);
-        },
+        onChanged: (_) {},
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
