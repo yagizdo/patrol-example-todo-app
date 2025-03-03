@@ -53,6 +53,8 @@ dev_dependencies:
   # Testing
   mocktail: ^1.0.4
   patrol: ^3.14.1
+  integration_test:
+    sdk: flutter
 
 patrol:
   app_name: Patrol Example Todo
