@@ -1,22 +1,24 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
+import 'package:patrol_example_todo/core/locator/app_locator.dart';
 import 'package:patrol_example_todo/main.dart';
 
 void main() {
+  patrolSetUp(() {
+    // Initialize GetIt before running tests
+    AppLocator.setup();
+  });
   patrolTest(
-    'counter state is the same after going to home and switching apps',
+    'Should show the app title as a "Todo App"',
     ($) async {
+      // Launch the app
       await $.pumpWidgetAndSettle(
         const MyApp(),
       );
 
-      expect($('app'), findsOneWidget);
-      if (!Platform.isIOS) {
-        await $.native.pressHome();
-      }
+      // Expect the app title to be "Todo App"
+      expect($('Todo App'), findsOneWidget,
+          reason: 'App title should be "Todo App"');
     },
   );
 }
