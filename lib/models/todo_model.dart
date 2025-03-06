@@ -73,4 +73,18 @@ class Todo extends Equatable {
       updatedAt: json['updatedAt'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'description': description,
+      'dueDate': dueDate,
+      'priority': priority,
+      'status': status,
+      'userId': userId,
+      'tags': tags,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+    };
+  }
 }
