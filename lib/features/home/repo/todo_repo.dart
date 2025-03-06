@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:patrol_example_todo/models/todo_model.dart';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 
 /// Repository for handling Todo-related API operations
 class TodoRepo {
@@ -16,70 +17,73 @@ class TodoRepo {
   Future<List<Todo>> fetchTodos() async {
     try {
       final response = await _dio.get('$_baseUrl/todos');
-      return _parseResponse(response);
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load todos: ${response.statusCode}');
+      }
+
+      // Parse response data based on its type
+      final jsonData = _parseResponseData(response.data);
+
+      // Convert JSON to Todo objects with error handling
+      return _convertJsonToTodos(jsonData);
     } on DioException catch (e) {
-      throw _handleDioException(e, 'fetch todos');
+      throw _createNetworkException(e, 'fetch todos');
     } catch (e) {
       throw Exception('Failed to fetch todos: $e');
     }
   }
 
-  /// Parses API response and handles different response formats
-  List<Todo> _parseResponse(Response response) {
-    if (response.statusCode != 200) {
-      throw Exception('Failed to load todos: ${response.statusCode}');
-    }
-
-    List<dynamic> jsonData;
-
-    if (response.data is String) {
-      jsonData = jsonDecode(response.data);
-    } else if (response.data is List) {
-      jsonData = response.data;
+  /// Parses response data to a List<dynamic> regardless of its original format
+  List<dynamic> _parseResponseData(dynamic data) {
+    if (data is String) {
+      return jsonDecode(data);
+    } else if (data is List) {
+      return data;
     } else {
-      throw Exception(
-          'Unexpected response format: ${response.data.runtimeType}');
+      throw Exception('Unexpected response format: ${data.runtimeType}');
     }
-
-    return _convertAndParseTodos(jsonData);
   }
 
-  /// Converts and parses JSON data to Todo objects
-  List<Todo> _convertAndParseTodos(List<dynamic> jsonData) {
-    final todos = <Todo>[];
-
-    for (var item in jsonData) {
-      try {
-        // Convert tags from List<dynamic> to List<String> if present
-        if (item['tags'] != null && item['tags'] is List) {
-          item['tags'] =
-              (item['tags'] as List).map((tag) => tag.toString()).toList();
-        }
-        todos.add(Todo.fromJson(item));
-      } catch (e) {
-        // Log error but continue processing other items
-        print('Error parsing todo item: $e');
-      }
-    }
-
-    return todos;
+  /// Converts JSON data to Todo objects with error handling for individual items
+  List<Todo> _convertJsonToTodos(List<dynamic> jsonData) {
+    return jsonData
+        .map((item) {
+          try {
+            // Handle tags conversion
+            if (item['tags'] != null && item['tags'] is List) {
+              item['tags'] = List<String>.from(
+                  (item['tags'] as List).map((tag) => tag.toString()));
+            }
+            return Todo.fromJson(item);
+          } catch (e) {
+            // Log error in debug mode
+            if (kDebugMode) {
+              print('Error parsing todo item: $e');
+              print('Problematic JSON: $item');
+            }
+            // Return null for failed items
+            return null;
+          }
+        })
+        // Filter out null items and cast to List<Todo>
+        .whereType<Todo>()
+        .toList();
   }
 
-  /// Handles Dio exceptions with descriptive error messages
-  Exception _handleDioException(DioException e, String operation) {
-    switch (e.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.sendTimeout:
-      case DioExceptionType.receiveTimeout:
-        return Exception('Network timeout while trying to $operation');
-      case DioExceptionType.badResponse:
-        return Exception(
-            'Server error (${e.response?.statusCode}) while trying to $operation: ${e.response?.statusMessage}');
-      case DioExceptionType.connectionError:
-        return Exception('No internet connection while trying to $operation');
-      default:
-        return Exception(
-            'Network error while trying to $operation: ${e.message}');
-    }
+  /// Creates a descriptive exception for network errors
+  Exception _createNetworkException(DioException e, String operation) {
+    final message = switch (e.type) {
+      DioExceptionType.connectionTimeout ||
+      DioExceptionType.sendTimeout ||
+      DioExceptionType.receiveTimeout =>
+        'Network timeout',
+      DioExceptionType.badResponse =>
+        'Server error (${e.response?.statusCode}): ${e.response?.statusMessage}',
+      DioExceptionType.connectionError => 'No internet connection',
+      _ => 'Network error: ${e.message}'
+    };
+
+    return Exception('$message while trying to $operation');
   }
 }
