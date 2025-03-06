@@ -16,12 +16,17 @@ void main() {
     Todo(title: 'Test Todo 3', description: 'Description 3'),
   ];
 
+  final newTodo = Todo(
+    title: 'Test Todo 4',
+    description: 'Description 4',
+  );
+
   setUp(() {
     todoRepoMock = TodoRepoMock();
     todoCubit = TodoCubit(todoRepo: todoRepoMock);
   });
 
-  group('TodoCubit', () {
+  group('TodoCubit Fetch Todos', () {
     test('[TodoCubit] should emit [TodoState] with todos', () async {
       when(() => todoRepoMock.fetchTodos()).thenAnswer((_) async => mockTodos);
 
@@ -41,5 +46,28 @@ void main() {
       expect(todoCubit.state.error, isNotEmpty);
       expect(todoCubit.state.error, 'Error');
     });
+  });
+
+  group('TodoCubit Add Todo', () {
+    test('[TodoCubit] should emit [TodoState] with todos', () async {
+      when(() => todoRepoMock.addTodo(newTodo))
+          .thenAnswer((_) async => mockTodos);
+
+      await todoCubit.addTodo(newTodo);
+
+      expect(todoCubit.state.todos, isNotEmpty);
+      expect(todoCubit.state.todos.length, 1);
+      expect(todoCubit.state.todos.last, newTodo);
+    });
+  });
+
+  test('[TodoCubit] should emit [TodoState] with error when addTodo fails',
+      () async {
+    when(() => todoRepoMock.addTodo(newTodo)).thenThrow('Error');
+
+    await todoCubit.addTodo(newTodo);
+
+    expect(todoCubit.state.error, isNotEmpty);
+    expect(todoCubit.state.error, 'Error');
   });
 }

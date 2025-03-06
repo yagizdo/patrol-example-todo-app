@@ -49,6 +49,7 @@ class TodoCubit extends Cubit<TodoState> {
     emit(state.copyWith(isLoading: true));
     try {
       await todoRepo.addTodo(todo);
+      emit(state.copyWith(todos: [...state.todos, todo]));
     } catch (e) {
       emit(state.copyWith(error: e.toString()));
       print("Error adding todo: $e");

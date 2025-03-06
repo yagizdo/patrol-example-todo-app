@@ -79,8 +79,6 @@ class TodoRepo {
       if (response.statusCode != 201) {
         throw Exception('Failed to add todo: ${response.statusCode}');
       }
-
-      fetchTodos();
     } on DioException catch (e) {
       throw _createNetworkException(e, 'add todo');
     } catch (e) {
