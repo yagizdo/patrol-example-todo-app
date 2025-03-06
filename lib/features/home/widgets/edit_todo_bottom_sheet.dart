@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../models/todo_model.dart';
-import '../cubit/todo_cubit.dart';
 
 class EditTodoBottomSheet extends StatefulWidget {
   final Todo todo;
@@ -16,33 +14,23 @@ class EditTodoBottomSheet extends StatefulWidget {
 }
 
 class _EditTodoBottomSheetState extends State<EditTodoBottomSheet> {
-  late final TextEditingController _titleController;
-  late final TextEditingController _descriptionController;
+  late final TextEditingController _todoController;
 
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController(text: widget.todo.title);
-    _descriptionController =
-        TextEditingController(text: widget.todo.description);
+    _todoController = TextEditingController(text: widget.todo.todo);
   }
 
   @override
   void dispose() {
-    _titleController.dispose();
-    _descriptionController.dispose();
+    _todoController.dispose();
     super.dispose();
   }
 
   void _updateTodo() {
-    if (_titleController.text.trim().isEmpty) return;
+    if (_todoController.text.trim().isEmpty) return;
 
-    context.read<TodoCubit>().editTodo(
-          widget.todo.copyWith(
-            title: _titleController.text.trim(),
-            description: _descriptionController.text.trim(),
-          ),
-        );
     Navigator.pop(context);
   }
 
@@ -65,23 +53,12 @@ class _EditTodoBottomSheetState extends State<EditTodoBottomSheet> {
           ),
           const SizedBox(height: 16),
           TextField(
-            controller: _titleController,
+            controller: _todoController,
             decoration: const InputDecoration(
-              labelText: 'Title',
+              labelText: 'Todo',
               border: OutlineInputBorder(),
             ),
             textInputAction: TextInputAction.next,
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _descriptionController,
-            decoration: const InputDecoration(
-              labelText: 'Description',
-              border: OutlineInputBorder(),
-            ),
-            maxLines: 3,
-            textInputAction: TextInputAction.done,
-            onSubmitted: (_) => _updateTodo(),
           ),
           const SizedBox(height: 16),
           ElevatedButton(

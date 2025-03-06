@@ -36,24 +36,34 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   # Bloc
-  flutter_bloc: ^8.1.4
-  equatable: ^2.0.5
+  bloc: ^9.0.0
+  flutter_bloc: ^9.0.0
+  equatable: ^2.0.7
+
+  # Network
+  dio: ^5.8.0+1
+
+  # Dependency Injection
+  get_it: ^8.0.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  # Testing
+  mocktail: ^1.0.4
+  patrol: ^3.14.1
+  integration_test:
+    sdk: flutter
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+patrol:
+  app_name: Patrol Example Todo
+  android:
+     package_name: com.example.patrol_example_todo
+  ios:
+      bundle_id: com.example.patrolExampleTodo
 
-# The following section is specific to Flutter packages.
+
 flutter:
 
   # The following line ensures that the Material Icons font is

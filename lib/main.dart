@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:patrol_example_todo/core/locator/app_locator.dart';
+import 'package:patrol_example_todo/features/home/repo/todo_repo.dart';
 import 'package:patrol_example_todo/features/home/view/home_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'features/home/cubit/todo_cubit.dart';
 
 void main() {
+  AppLocator.setup();
   runApp(const MyApp());
 }
 
@@ -13,7 +16,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TodoCubit(),
+      create: (context) => TodoCubit(
+        todoRepo: AppLocator.locator<TodoRepo>(),
+      ),
       child: MaterialApp(
         title: 'Patrol Example Todo',
         theme: ThemeData(
