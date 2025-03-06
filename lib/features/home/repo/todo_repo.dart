@@ -71,6 +71,23 @@ class TodoRepo {
         .toList();
   }
 
+  /// Add a todo to the API
+  Future<void> addTodo(Todo todo) async {
+    try {
+      final response = await _dio.post(TODOS_ENDPOINT, data: todo.toJson());
+
+      if (response.statusCode != 201) {
+        throw Exception('Failed to add todo: ${response.statusCode}');
+      }
+
+      fetchTodos();
+    } on DioException catch (e) {
+      throw _createNetworkException(e, 'add todo');
+    } catch (e) {
+      throw Exception('Failed to add todo: $e');
+    }
+  }
+
   /// Creates a descriptive exception for network errors
   Exception _createNetworkException(DioException e, String operation) {
     final message = switch (e.type) {
