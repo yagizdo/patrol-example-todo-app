@@ -1,95 +1,76 @@
 import 'package:equatable/equatable.dart';
 
-class TodoResponse extends Equatable {
-  final List<Todo> todos;
-  final int total;
-  final int skip;
-  final int limit;
-
-  const TodoResponse({
-    required this.todos,
-    required this.total,
-    required this.skip,
-    required this.limit,
-  });
-
-  @override
-  List<Object?> get props => [todos, total, skip, limit];
-
-  factory TodoResponse.fromJson(Map<String, dynamic> json) {
-    return TodoResponse(
-      todos: (json['todos'] as List).map((e) => Todo.fromJson(e)).toList(),
-      total: json['total'],
-      skip: json['skip'],
-      limit: json['limit'],
-    );
-  }
-
-  factory TodoResponse.mock() {
-    return TodoResponse(
-      todos: [
-        Todo(
-          id: '1',
-          todo: 'Buy milk',
-          userId: 1,
-          isCompleted: false,
-        ),
-        Todo(
-          id: '2',
-          todo: 'Buy bread',
-          userId: 1,
-          isCompleted: true,
-        ),
-        Todo(
-          id: '3',
-          todo: 'Buy eggs',
-          userId: 1,
-          isCompleted: false,
-        ),
-      ],
-      total: 3,
-      skip: 0,
-      limit: 3,
-    );
-  }
-}
-
 class Todo extends Equatable {
-  final String id;
-  final String todo;
-  final bool isCompleted;
-  final int userId;
+  final String? title;
+  final String? description;
+  final String? dueDate;
+  final String? priority;
+  final String? status;
+  final List<String>? tags;
+  final int? userId;
+  final String? createdAt;
+  final String? updatedAt;
 
   const Todo({
-    required this.id,
-    required this.todo,
-    required this.userId,
-    this.isCompleted = false,
+    this.title,
+    this.description,
+    this.dueDate,
+    this.priority,
+    this.status,
+    this.userId,
+    this.tags,
+    this.createdAt,
+    this.updatedAt,
   });
 
   Todo copyWith({
-    String? id,
-    String? todo,
-    bool? isCompleted,
+    String? title,
+    String? description,
+    String? dueDate,
+    String? priority,
+    String? status,
+    List<String>? tags,
     int? userId,
+    String? createdAt,
+    String? updatedAt,
   }) {
     return Todo(
-      id: id ?? this.id,
-      todo: todo ?? this.todo,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      dueDate: dueDate ?? this.dueDate,
+      priority: priority ?? this.priority,
+      status: status ?? this.status,
       userId: userId ?? this.userId,
-      isCompleted: isCompleted ?? this.isCompleted,
+      tags: tags ?? this.tags,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
   @override
-  List<Object?> get props => [id, todo, userId, isCompleted];
+  List<Object?> get props => [
+        title,
+        description,
+        dueDate,
+        priority,
+        status,
+        userId,
+        tags,
+        createdAt,
+        updatedAt,
+      ];
 
   factory Todo.fromJson(Map<String, dynamic> json) {
     return Todo(
-      id: json['id'].toString(),
-      todo: json['todo'],
+      title: json['title'],
+      description: json['description'],
+      dueDate: json['dueDate'],
+      priority: json['priority'],
+      status: json['status'],
       userId: json['userId'],
-      isCompleted: json['completed'],
+      tags: json['tags'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
     );
   }
 }

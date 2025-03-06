@@ -61,11 +61,7 @@ class _TodoItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(todo.todo),
-      leading: Checkbox(
-        value: todo.isCompleted,
-        onChanged: (_) {},
-      ),
+      title: Text(todo.title ?? ""),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
