@@ -38,7 +38,7 @@ class TodoCubit extends Cubit<TodoState> {
   Future<void> getTodos() async {
     emit(state.copyWith(isLoading: true));
     try {
-      final todos = await todoRepo.getTodos();
+      final todos = await todoRepo.fetchTodos();
       emit(state.copyWith(todos: todos, isLoading: false));
     } catch (e) {
       emit(state.copyWith(error: e.toString(), isLoading: false));

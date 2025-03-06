@@ -9,6 +9,13 @@ void main() {
   late TodoRepoMock todoRepoMock;
   late TodoCubit todoCubit;
 
+  // Create mock todos for testing - adjust fields to match your actual Todo model
+  final mockTodos = [
+    Todo(title: 'Test Todo 1', description: 'Description 1'),
+    Todo(title: 'Test Todo 2', description: 'Description 2'),
+    Todo(title: 'Test Todo 3', description: 'Description 3'),
+  ];
+
   setUp(() {
     todoRepoMock = TodoRepoMock();
     todoCubit = TodoCubit(todoRepo: todoRepoMock);
@@ -16,18 +23,18 @@ void main() {
 
   group('TodoCubit', () {
     test('[TodoCubit] should emit [TodoState] with todos', () async {
-      when(() => todoRepoMock.getTodos())
-          .thenAnswer((_) async => TodoResponse.mock().todos);
+      when(() => todoRepoMock.fetchTodos()).thenAnswer((_) async => mockTodos);
 
       await todoCubit.getTodos();
 
       expect(todoCubit.state.todos, isNotEmpty);
       expect(todoCubit.state.todos.length, 3);
-      expect(todoCubit.state.todos, TodoResponse.mock().todos);
+      expect(todoCubit.state.todos, mockTodos);
     });
-    test('[TodoCubit] should not emit [TodoState] when getTodos fails',
+
+    test('[TodoCubit] should not emit [TodoState] when fetchTodos fails',
         () async {
-      when(() => todoRepoMock.getTodos()).thenThrow('Error');
+      when(() => todoRepoMock.fetchTodos()).thenThrow('Error');
 
       await todoCubit.getTodos();
 

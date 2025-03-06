@@ -19,7 +19,7 @@ class _EditTodoBottomSheetState extends State<EditTodoBottomSheet> {
   @override
   void initState() {
     super.initState();
-    _todoController = TextEditingController(text: widget.todo.todo);
+    _todoController = TextEditingController(text: widget.todo.title);
   }
 
   @override
