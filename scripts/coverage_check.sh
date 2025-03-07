@@ -28,6 +28,8 @@ lcov --remove coverage/lcov.info \
   '**/pages/**' \
   '**/screen/**' \
   '**/screens/**' \
+  '**/models/**' \
+  '**/model/**' \
   -o "$FILTERED_LCOV"
 
 # Keep only specific patterns
