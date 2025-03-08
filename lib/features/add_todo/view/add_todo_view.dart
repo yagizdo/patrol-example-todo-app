@@ -11,29 +11,106 @@ class AddTodoView extends StatefulWidget {
 }
 
 class _AddTodoViewState extends State<AddTodoView> {
+  late final TextEditingController todoTitleController;
+  late final TextEditingController todoDescriptionController;
+
   @override
   void initState() {
     super.initState();
+    todoTitleController = TextEditingController();
+    todoDescriptionController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    todoTitleController.dispose();
+    todoDescriptionController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Add Todo')),
-      body: Center(
-        child: TextButton(
-          onPressed: () {
-            context.read<AddTodoCubit>().addTodo(Todo(
-                  title: 'Test',
-                  description: 'Test',
-                  dueDate: '2025-01-01',
-                  priority: TodoPriority.high,
-                  status: TodoStatus.notStarted,
-                  tags: ['Test'],
-                ));
-          },
-          child: Text('Add Todo'),
+      body: Column(
+        children: [
+          _AddTodoTextField(
+            labelText: 'Title',
+            controller: todoTitleController,
+          ),
+          _AddTodoTextField(
+            labelText: 'Description',
+            controller: todoDescriptionController,
+          ),
+          _AddTodoButton(
+            onPressed: _onAddTodoPressed,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _onAddTodoPressed() {
+    print("Todo title: ${todoTitleController.text}");
+    if (todoTitleController.text.isEmpty) {
+      return;
+    }
+
+    print('Adding todo...');
+
+    Todo todo = Todo(
+      title: todoTitleController.text,
+      description: todoDescriptionController.text,
+    );
+
+    context.read<AddTodoCubit>().addTodo(todo);
+  }
+}
+
+class _AddTodoButton extends StatelessWidget {
+  const _AddTodoButton({required this.onPressed});
+
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+      child: const Text(
+        'Add Todo',
+        style: TextStyle(color: Colors.white),
+      ),
+    );
+  }
+}
+
+class _AddTodoTextField extends StatelessWidget {
+  const _AddTodoTextField({
+    required this.labelText,
+    this.onChanged,
+    required this.controller,
+  });
+
+  final String labelText;
+  final void Function(String)? onChanged;
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: labelText,
         ),
+        onChanged: onChanged,
       ),
     );
   }
