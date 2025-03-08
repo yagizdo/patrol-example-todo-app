@@ -21,6 +21,7 @@ void main() {
 
     // Step 1: Tap the FAB with plus icon to navigate to the add todo screen
     await tester.tap(find.widgetWithIcon(FloatingActionButton, Icons.add));
+    // Wait for the add todo screen to stabilize
     await tester.pumpAndSettle();
 
     // Step 2: Enter text for the first todo item
