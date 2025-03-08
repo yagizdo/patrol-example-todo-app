@@ -38,13 +38,20 @@ dependencies:
   # Bloc
   bloc: ^9.0.0
   flutter_bloc: ^9.0.0
-  equatable: ^2.0.7
 
   # Network
   dio: ^5.8.0+1
 
   # Dependency Injection
   get_it: ^8.0.3
+
+  #Json Serialization
+  freezed: ^2.5.8
+  freezed_annotation: ^2.4.4
+
+  # Model
+  json_annotation: ^4.9.0
+  equatable: ^2.0.7
 
 dev_dependencies:
   flutter_test:
