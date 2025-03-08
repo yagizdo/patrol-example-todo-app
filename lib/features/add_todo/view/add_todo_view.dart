@@ -51,16 +51,22 @@ class _AddTodoViewState extends State<AddTodoView> {
   }
 
   void _onAddTodoPressed() {
-    print("Todo title: ${todoTitleController.text}");
     if (todoTitleController.text.isEmpty) {
       return;
     }
 
-    print('Adding todo...');
-
     Todo todo = Todo(
       title: todoTitleController.text,
-      description: todoDescriptionController.text,
+      description: todoDescriptionController.text.isEmpty
+          ? 'Description'
+          : todoDescriptionController.text,
+      dueDate: DateTime.now().toIso8601String(),
+      priority: TodoPriority.medium,
+      status: TodoStatus.notStarted,
+      userId: 1,
+      tags: [],
+      createdAt: DateTime.now().toIso8601String(),
+      updatedAt: DateTime.now().toIso8601String(),
     );
 
     context.read<AddTodoCubit>().addTodo(todo);
