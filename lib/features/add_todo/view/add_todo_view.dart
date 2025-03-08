@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:patrol_example_todo/features/add_todo/cubit/add_todo_cubit.dart';
+import 'package:patrol_example_todo/features/home/cubit/todo_cubit.dart';
 import 'package:patrol_example_todo/models/todo_model.dart';
 
 class AddTodoView extends StatefulWidget {
@@ -13,12 +14,14 @@ class AddTodoView extends StatefulWidget {
 class _AddTodoViewState extends State<AddTodoView> {
   late final TextEditingController todoTitleController;
   late final TextEditingController todoDescriptionController;
+  late final AddTodoCubit _addTodoCubit;
 
   @override
   void initState() {
     super.initState();
     todoTitleController = TextEditingController();
     todoDescriptionController = TextEditingController();
+    _addTodoCubit = context.read<AddTodoCubit>();
   }
 
   @override
@@ -32,20 +35,59 @@ class _AddTodoViewState extends State<AddTodoView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Add Todo')),
-      body: Column(
-        children: [
-          _AddTodoTextField(
-            labelText: 'Title',
-            controller: todoTitleController,
-          ),
-          _AddTodoTextField(
-            labelText: 'Description',
-            controller: todoDescriptionController,
-          ),
-          _AddTodoButton(
-            onPressed: _onAddTodoPressed,
-          ),
-        ],
+      body: BlocConsumer<AddTodoCubit, AddTodoState>(
+        bloc: _addTodoCubit,
+        listener: (context, state) {
+          if (state.isSuccess) {
+            context.read<TodoCubit>().getTodos();
+            Navigator.pop(context);
+            // Reset the state after navigation
+            context.read<AddTodoCubit>().reset();
+          }
+        },
+        builder: (context, state) {
+          if (state.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return Column(
+            children: [
+              _AddTodoTextField(
+                labelText: 'Title',
+                controller: todoTitleController,
+              ),
+              _AddTodoTextField(
+                labelText: 'Description',
+                controller: todoDescriptionController,
+              ),
+              _AddTodoButton(
+                onPressed: _onAddTodoPressed,
+              ),
+              if (state.error != null)
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SelectableText.rich(
+                    TextSpan(
+                      text: 'Error: ',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: state.error,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.error,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -69,7 +111,7 @@ class _AddTodoViewState extends State<AddTodoView> {
       updatedAt: DateTime.now().toIso8601String(),
     );
 
-    context.read<AddTodoCubit>().addTodo(todo);
+    _addTodoCubit.addTodo(todo);
   }
 }
 
