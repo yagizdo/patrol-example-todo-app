@@ -19,8 +19,8 @@ void main() {
     // Wait for the app to stabilize
     await tester.pumpAndSettle();
 
-    // Step 1: Tap the FAB to navigate to the add todo screen
-    await tester.tap(find.byType(FloatingActionButton));
+    // Step 1: Tap the FAB with plus icon to navigate to the add todo screen
+    await tester.tap(find.widgetWithIcon(FloatingActionButton, Icons.add));
     await tester.pumpAndSettle();
 
     // Step 2: Enter text for the first todo item
@@ -37,7 +37,7 @@ void main() {
     expect(find.text('Test Todo'), findsOneWidget);
 
     // Step 5: Add a second todo to verify multiple additions work
-    await tester.tap(find.byType(FloatingActionButton));
+    await tester.tap(find.widgetWithIcon(FloatingActionButton, Icons.add));
     await tester.pumpAndSettle(duration: const Duration(seconds: 1));
 
     // Step 6: Enter text for the second todo item
