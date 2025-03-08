@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:patrol_example_todo/features/add_todo/view/add_todo_view.dart';
 import 'package:patrol_example_todo/features/home/widgets/todo_list.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:patrol_example_todo/models/todo_model.dart';
 import '../cubit/todo_cubit.dart';
 
 class HomeView extends StatefulWidget {
@@ -43,16 +43,9 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _showAddTodoDialog(BuildContext context) {
-    context.read<TodoCubit>().addTodo(
-          Todo(
-            title: 'New Todo2',
-            description: 'New Todo Description',
-            priority: 'High',
-            status: 'In Progress',
-            dueDate: DateTime.now().toString(),
-            userId: 1,
-            tags: ['tag1', 'tag2'],
-          ),
-        );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddTodoView()),
+    );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:patrol_example_todo/features/home/repo/todo_repo.dart';
+import 'package:patrol_example_todo/core/bl/repositories/todo_repo.dart';
 import '../../../models/todo_model.dart';
 
 class TodoState extends Equatable {
