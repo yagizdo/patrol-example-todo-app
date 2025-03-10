@@ -86,6 +86,21 @@ class TodoRepo {
     }
   }
 
+  /// Delete a todo from the API
+  Future<void> deleteTodo(String id) async {
+    try {
+      final response = await _dio.delete('$TODOS_ENDPOINT/$id');
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to delete todo: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      throw _createNetworkException(e, 'delete todo');
+    } catch (e) {
+      throw Exception('Failed to delete todo: $e');
+    }
+  }
+
   /// Creates a descriptive exception for network errors
   Exception _createNetworkException(DioException e, String operation) {
     final message = switch (e.type) {

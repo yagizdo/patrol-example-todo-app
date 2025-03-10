@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:patrol_example_todo/core/locator/app_locator.dart';
 import 'package:patrol_example_todo/core/bl/repositories/todo_repo.dart';
 import 'package:patrol_example_todo/features/add_todo/cubit/add_todo_cubit.dart';
+import 'package:patrol_example_todo/features/delete_todo/cubit/delete_todo_cubit.dart';
 import 'package:patrol_example_todo/features/home/view/home_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'features/home/cubit/todo_cubit.dart';
@@ -25,6 +26,11 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => AddTodoCubit(
+            todoRepo: AppLocator.locator<TodoRepo>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => DeleteTodoCubit(
             todoRepo: AppLocator.locator<TodoRepo>(),
           ),
         ),

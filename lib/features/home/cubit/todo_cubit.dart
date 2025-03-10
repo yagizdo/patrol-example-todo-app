@@ -57,4 +57,11 @@ class TodoCubit extends Cubit<TodoState> {
 
     emit(state.copyWith(isLoading: false));
   }
+
+  // Optimistically remove a todo from the state
+  void removeTodoFromState(String todoId) {
+    final updatedTodos =
+        state.todos.where((todo) => todo.id != todoId).toList();
+    emit(state.copyWith(todos: updatedTodos));
+  }
 }
