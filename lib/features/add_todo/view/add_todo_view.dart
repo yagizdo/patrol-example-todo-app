@@ -128,7 +128,7 @@ class _AddTodoButton extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       child: const Text(
-        'Add Todo',
+        'Add',
         style: TextStyle(color: Colors.white),
       ),
     );

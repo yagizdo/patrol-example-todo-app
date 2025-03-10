@@ -14,42 +14,77 @@ void main() {
   // Test case to verify the todo addition functionality
   patrolTest('When I add a todo, it should be added to the list',
       (tester) async {
-    // Launch the application
+    // Step 1: Launch the application and wait for it to stabilize
     await tester.pumpWidget(const MyApp());
-    // Wait for the app to stabilize
     await tester.pumpAndSettle();
 
-    // Step 1: Tap the FAB with plus icon to navigate to the add todo screen
+    // Step 2: Tap the FAB with plus icon to navigate to the add todo screen
+    // The FloatingActionButton is located at the bottom right of the HomeView
     await tester.tap(find.widgetWithIcon(FloatingActionButton, Icons.add));
-    // Wait for the add todo screen to stabilize
     await tester.pumpAndSettle();
 
-    // Step 2: Enter text for the first todo item
-    await tester.enterText(find.byType(TextField), 'Test Todo');
-    // Wait to ensure the text is properly entered
-    await tester.pumpAndSettle(duration: const Duration(seconds: 1));
+    // Step 3: Verify we're on the Add Todo screen by checking for the AppBar title
+    expect(find.text('Add'), findsOneWidget);
 
-    // Step 3: Tap the Add Todo button to add the todo
-    await tester.tap(find.byType(ElevatedButton));
-    // Wait for the save operation to complete and UI to update
-    await tester.pumpAndSettle(duration: const Duration(seconds: 1));
+    // Step 4: Enter text for the first todo item in the title field
+    // We're targeting the first TextField which is for the title
+    final titleTextField = find.byType(TextField).first;
+    await tester.enterText(titleTextField, 'Test Todo');
+    await tester.pumpAndSettle();
 
-    // Step 4: Verify the first todo was added successfully
+    // Step 5: Tap the Add Todo button to save the todo
+    // The button is an ElevatedButton with text 'Add Todo'
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Add'));
+    await tester.pumpAndSettle();
+
+    // Step 6: Verify we're back on the home screen and the todo was added successfully
+    // We should see the todo title in the list
     expect(find.text('Test Todo'), findsOneWidget);
 
-    // Step 5: Add a second todo to verify multiple additions work
+    // Step 7: Add a second todo to verify multiple additions work
     await tester.tap(find.widgetWithIcon(FloatingActionButton, Icons.add));
-    await tester.pumpAndSettle(duration: const Duration(seconds: 1));
+    await tester.pumpAndSettle();
 
-    // Step 6: Enter text for the second todo item
-    await tester.enterText(find.byType(TextField), 'Test Todo 2');
-    await tester.pumpAndSettle(duration: const Duration(seconds: 1));
+    // Step 8: Enter text for the second todo item
+    await tester.enterText(titleTextField, 'Test Todo 2');
+    await tester.pumpAndSettle();
 
-    // Step 7: Save the second todo
-    await tester.tap(find.byType(ElevatedButton));
-    await tester.pumpAndSettle(duration: const Duration(seconds: 1));
+    // Step 9: Add a description for the second todo to test multiple fields
+    final descriptionTextField = find.byType(TextField).at(1);
+    await tester.enterText(descriptionTextField, 'This is a description');
+    await tester.pumpAndSettle();
 
-    // Step 8: Verify the second todo was added successfully
+    // Step 10: Save the second todo
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Add'));
+    await tester.pumpAndSettle();
+
+    // Step 11: Verify the second todo was added successfully
     expect(find.text('Test Todo 2'), findsOneWidget);
+
+    // Step 12: Verify both todos exist in the list
+    expect(find.text('Test Todo'), findsOneWidget);
+    expect(find.text('Test Todo 2'), findsOneWidget);
+
+    // Step 13: Clean up - Delete the first todo
+    // Tap the delete icon on the first todo item
+    await tester.tap(find.byIcon(Icons.delete).first);
+    await tester.pumpAndSettle();
+
+    // Confirm deletion in the dialog
+    await tester.tap(find.text('Delete'));
+    await tester.pumpAndSettle();
+
+    // Step 14: Clean up - Delete the second todo
+    // Now the second todo becomes the first in the list
+    await tester.tap(find.byIcon(Icons.delete).first);
+    await tester.pumpAndSettle();
+
+    // Confirm deletion in the dialog
+    await tester.tap(find.text('Delete'));
+    await tester.pumpAndSettle();
+
+    // Step 15: Final verification - Ensure all test todos are removed
+    expect(find.text('Test Todo'), findsNothing);
+    expect(find.text('Test Todo 2'), findsNothing);
   });
 }
