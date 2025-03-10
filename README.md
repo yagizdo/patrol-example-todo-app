@@ -74,6 +74,27 @@ cd patrol_example_todo
 flutter pub get
 ```
 
+### Setting Up Patrol CLI
+
+1. Install the Patrol CLI globally:
+
+```bash
+dart pub global activate patrol_cli
+```
+
+2. Make sure the Patrol CLI is in your PATH. If not, add the following to your shell profile:
+
+```bash
+# For bash (~/.bashrc) or zsh (~/.zshrc)
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+```
+
+3. Verify the installation:
+
+```bash
+patrol --version
+```
+
 ### Run the App
 
 ```bash
@@ -84,6 +105,28 @@ flutter run
 
 ```bash
 patrol test
+```
+
+### Code Coverage
+
+The project includes a script to generate and view code coverage reports:
+
+```bash
+# Run the coverage check script
+./scripts/coverage_check.sh
+```
+
+This script:
+- Runs all tests with coverage
+- Filters out generated files and UI components
+- Focuses on business logic files (stores, models, cubits, etc.)
+- Generates an HTML report in the `coverage/html` directory
+- Automatically opens the report in your default browser
+
+To generate the report without opening it:
+
+```bash
+./scripts/coverage_check.sh --no-open
 ```
 
 ## 📦 Dependencies
