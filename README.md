@@ -1,16 +1,111 @@
-# patrol_example_todo
+# Patrol Example Todo App
 
-A new Flutter project.
+A Flutter Todo application demonstrating the use of Patrol for integration testing.
 
-## Getting Started
+## 📱 App Overview
 
-This project is a starting point for a Flutter application.
+This is a simple Todo application built with Flutter that allows users to:
+- View a list of todos
+- Add new todos
+- Mark todos as completed
+- Delete todos
 
-A few resources to get you started if this is your first Flutter project:
+The app serves as an example of how to implement Patrol for integration testing in a Flutter application with a clean architecture approach.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🏗️ Architecture
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The application follows a clean architecture pattern with the following structure:
+
+```
+lib/
+├── constants/       # App-wide constants
+├── core/
+│   ├── bl/          # Business logic
+│   │   └── repositories/ # Repository implementations
+│   └── locator/     # Dependency injection setup
+├── features/        # Feature modules
+│   ├── add_todo/    # Add todo feature
+│   │   ├── cubit/   # State management
+│   │   └── view/    # UI components
+│   └── home/        # Home feature
+│       ├── cubit/   # State management
+│       └── view/    # UI components
+├── models/          # Data models
+└── main.dart        # App entry point
+```
+
+### State Management
+- Uses **BLoC/Cubit** pattern for state management
+- Each feature has its own Cubit for managing state
+
+### Dependency Injection
+- Uses **GetIt** for service locator pattern
+- Services and repositories are registered in the AppLocator
+
+## 🧪 Testing
+
+The app includes integration tests using Patrol:
+
+```
+integration_test/
+├── add_todo_test.dart    # Tests for adding todos
+├── example_test.dart     # Example tests
+└── test_bundle.dart      # Test bundle configuration
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Flutter SDK (^3.6.0)
+- Dart SDK (^3.6.0)
+- Android Studio / VS Code
+- Android SDK / Xcode (for iOS development)
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/patrol_example_todo.git
+cd patrol_example_todo
+```
+
+### Install Dependencies
+
+```bash
+flutter pub get
+```
+
+### Run the App
+
+```bash
+flutter run
+```
+
+### Run Integration Tests
+
+```bash
+patrol test
+```
+
+## 📦 Dependencies
+
+### Main Dependencies
+- **flutter_bloc**: ^9.0.0 - State management
+- **dio**: ^5.8.0+1 - HTTP client
+- **get_it**: ^8.0.3 - Dependency injection
+- **freezed**: ^2.5.8 - Code generation for immutable classes
+- **equatable**: ^2.0.7 - Equality comparisons
+
+### Dev Dependencies
+- **patrol**: ^3.14.1 - Integration testing
+- **mocktail**: ^1.0.4 - Mocking for tests
+- **flutter_lints**: ^5.0.0 - Linting rules
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 📚 Resources
+
+- [Flutter Documentation](https://docs.flutter.dev/)
+- [Patrol Documentation](https://patrol.leancode.co/)
+- [Flutter Bloc Documentation](https://bloclibrary.dev/)
