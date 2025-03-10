@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:patrol_example_todo/constants/string_constants.dart';
 import 'package:patrol_example_todo/models/todo_model.dart';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/foundation.dart';
 /// Repository for handling Todo-related API operations
 class TodoRepo {
   final Dio _dio;
-  final String _baseUrl = 'https://shrimo.com/fake-api';
 
   /// Creates a TodoRepo with an optional Dio instance
   /// This allows for dependency injection and easier testing
@@ -16,7 +16,7 @@ class TodoRepo {
   /// Returns a list of Todo objects
   Future<List<Todo>> fetchTodos() async {
     try {
-      final response = await _dio.get('$_baseUrl/todos');
+      final response = await _dio.get(TODOS_ENDPOINT);
 
       if (response.statusCode != 200) {
         throw Exception('Failed to load todos: ${response.statusCode}');
@@ -69,6 +69,21 @@ class TodoRepo {
         // Filter out null items and cast to List<Todo>
         .whereType<Todo>()
         .toList();
+  }
+
+  /// Add a todo to the API
+  Future<void> addTodo(Todo todo) async {
+    try {
+      final response = await _dio.post(TODOS_ENDPOINT, data: todo.toJson());
+
+      if (response.statusCode != 201) {
+        throw Exception('Failed to add todo: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      throw _createNetworkException(e, 'add todo');
+    } catch (e) {
+      throw Exception('Failed to add todo: $e');
+    }
   }
 
   /// Creates a descriptive exception for network errors

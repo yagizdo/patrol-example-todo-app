@@ -4,8 +4,8 @@ class Todo extends Equatable {
   final String? title;
   final String? description;
   final String? dueDate;
-  final String? priority;
-  final String? status;
+  final TodoPriority? priority;
+  final TodoStatus? status;
   final List<String>? tags;
   final int? userId;
   final String? createdAt;
@@ -27,8 +27,8 @@ class Todo extends Equatable {
     String? title,
     String? description,
     String? dueDate,
-    String? priority,
-    String? status,
+    TodoPriority? priority,
+    TodoStatus? status,
     List<String>? tags,
     int? userId,
     String? createdAt,
@@ -65,10 +65,14 @@ class Todo extends Equatable {
       title: json['title'],
       description: json['description'],
       dueDate: json['dueDate'],
-      priority: json['priority'],
-      status: json['status'],
+      priority: json['priority'] != null
+          ? TodoPriorityExtension.fromString(json['priority'])
+          : null,
+      status: json['status'] != null
+          ? TodoStatusExtension.fromString(json['status'])
+          : null,
       userId: json['userId'],
-      tags: json['tags'],
+      tags: json['tags'] != null ? List<String>.from(json['tags']) : null,
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
     );
@@ -79,12 +83,72 @@ class Todo extends Equatable {
       'title': title,
       'description': description,
       'dueDate': dueDate,
-      'priority': priority,
-      'status': status,
+      'priority': priority?.name,
+      'status': status?.name,
       'userId': userId,
       'tags': tags,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+    };
+  }
+}
+
+enum TodoStatus {
+  notStarted,
+  inProgress,
+  completed,
+}
+
+extension TodoStatusExtension on TodoStatus {
+  String get name {
+    switch (this) {
+      case TodoStatus.notStarted:
+        return 'Not Started';
+      case TodoStatus.inProgress:
+        return 'In Progress';
+      case TodoStatus.completed:
+        return 'Completed';
+    }
+  }
+
+  static TodoStatus fromString(String value) {
+    return switch (value) {
+      'Not Started' => TodoStatus.notStarted,
+      'In Progress' => TodoStatus.inProgress,
+      'Completed' => TodoStatus.completed,
+      _ => throw ArgumentError('Invalid TodoStatus value: $value'),
+    };
+  }
+}
+
+enum TodoPriority {
+  low,
+  medium,
+  high,
+  critical,
+}
+
+extension TodoPriorityExtension on TodoPriority {
+  String get name {
+    switch (this) {
+      case TodoPriority.low:
+        return 'Low';
+      case TodoPriority.medium:
+        return 'Medium';
+      case TodoPriority.high:
+        return 'High';
+      case TodoPriority.critical:
+        return 'Critical';
+    }
+  }
+
+  static TodoPriority fromString(String value) {
+    return switch (value) {
+      'Low' => TodoPriority.low,
+      'Medium' => TodoPriority.medium,
+      'High' => TodoPriority.high,
+      'Critical' => TodoPriority.critical,
+      _ => throw ArgumentError('Invalid TodoPriority value: $value'),
     };
   }
 }

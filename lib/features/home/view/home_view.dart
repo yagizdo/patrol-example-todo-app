@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patrol_example_todo/features/add_todo/view/add_todo_view.dart';
 import 'package:patrol_example_todo/features/home/widgets/todo_list.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/todo_cubit.dart';
@@ -42,15 +43,9 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _showAddTodoDialog(BuildContext context) {
-    // Show dialog to add new todo
-    //   context.read<TodoCubit>().addTodo(
-    //         Todo(
-    //           id: DateTime.now().toString(),
-    //           todo: 'New Todo',
-    //           userId: 1,
-    //           isCompleted: false,
-    //         ),
-    //       );
-    // }
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddTodoView()),
+    );
   }
 }
