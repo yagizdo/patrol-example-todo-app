@@ -9,7 +9,7 @@ import 'package:patrol/src/native/contracts/contracts.dart';
 import 'package:test_api/src/backend/invoker.dart';
 
 // START: GENERATED TEST IMPORTS
-import 'add_todo/add_todo_test.dart' as add_todo__add_todo_test;
+import 'delete_todo/delete_todo_test.dart' as delete_todo__delete_todo_test;
 // END: GENERATED TEST IMPORTS
 
 Future<void> main() async {
@@ -69,7 +69,7 @@ Future<void> main() async {
   });
 
   // START: GENERATED TEST GROUPS
-  group('add_todo.add_todo_test', add_todo__add_todo_test.main);
+  group('delete_todo.delete_todo_test', delete_todo__delete_todo_test.main);
   // END: GENERATED TEST GROUPS
 
   final dartTestGroup = await testExplorationCompleter.future;

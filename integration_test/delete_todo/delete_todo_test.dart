@@ -26,7 +26,7 @@ void main() {
       await tester.enterText(find.byType(TextField).first, 'Todo to Delete');
       await tester.pumpAndSettle();
 
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Add Todo'));
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Add'));
       await tester.pumpAndSettle();
 
       // Step 3: Verify the todo was added
