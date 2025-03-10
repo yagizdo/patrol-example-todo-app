@@ -11,15 +11,10 @@ void main() {
 
   // Create mock todos for testing - adjust fields to match your actual Todo model
   final mockTodos = [
-    Todo(title: 'Test Todo 1', description: 'Description 1'),
-    Todo(title: 'Test Todo 2', description: 'Description 2'),
-    Todo(title: 'Test Todo 3', description: 'Description 3'),
+    Todo(id: '1', title: 'Test Todo 1', description: 'Description 1'),
+    Todo(id: '2', title: 'Test Todo 2', description: 'Description 2'),
+    Todo(id: '3', title: 'Test Todo 3', description: 'Description 3'),
   ];
-
-  final newTodo = Todo(
-    title: 'Test Todo 4',
-    description: 'Description 4',
-  );
 
   setUp(() {
     todoRepoMock = TodoRepoMock();
@@ -46,28 +41,25 @@ void main() {
       expect(todoCubit.state.error, isNotEmpty);
       expect(todoCubit.state.error, 'Error');
     });
-  });
 
-  group('TodoCubit Add Todo', () {
-    test('[TodoCubit] should emit [TodoState] with todos', () async {
-      when(() => todoRepoMock.addTodo(newTodo))
-          .thenAnswer((_) async => mockTodos);
+    test(
+        '[TodoCubit] should remove a todo from the state when removeTodoFromState is called',
+        () async {
+      // First, set up the initial state with todos by mocking the getTodos method
+      when(() => todoRepoMock.fetchTodos()).thenAnswer((_) async => mockTodos);
+      await todoCubit.getTodos();
 
-      await todoCubit.addTodo(newTodo);
+      // Verify initial state has all todos
+      expect(todoCubit.state.todos.length, 3);
 
+      // Call the method under test
+      todoCubit.removeTodoFromState(mockTodos[0].id!);
+
+      // Verify the todo was removed
       expect(todoCubit.state.todos, isNotEmpty);
-      expect(todoCubit.state.todos.length, 1);
-      expect(todoCubit.state.todos.last, newTodo);
+      expect(todoCubit.state.todos.length, 2);
+      expect(todoCubit.state.todos.any((todo) => todo.id == mockTodos[0].id),
+          isFalse);
     });
-  });
-
-  test('[TodoCubit] should emit [TodoState] with error when addTodo fails',
-      () async {
-    when(() => todoRepoMock.addTodo(newTodo)).thenThrow('Error');
-
-    await todoCubit.addTodo(newTodo);
-
-    expect(todoCubit.state.error, isNotEmpty);
-    expect(todoCubit.state.error, 'Error');
   });
 }

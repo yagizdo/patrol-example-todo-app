@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:patrol_example_todo/features/delete_todo/cubit/delete_todo_cubit.dart';
+import 'package:patrol_example_todo/features/home/cubit/todo_cubit.dart';
 import '../../../models/todo_model.dart';
 import './edit_todo_bottom_sheet.dart';
 
@@ -43,8 +46,27 @@ class _TodoItem extends StatelessWidget {
         actions: [
           CupertinoDialogAction(
             isDestructiveAction: true,
-            onPressed: () {
+            onPressed: () async {
+              if (todo.id == null) {
+                Navigator.pop(context);
+                return;
+              }
+
+              // Close the dialog first
               Navigator.pop(context);
+
+              // Optimistically remove the todo from the UI
+              final todoCubit = context.read<TodoCubit>();
+              todoCubit.removeTodoFromState(todo.id!);
+
+              // Delete the todo in the background
+              final deleteCubit = context.read<DeleteTodoCubit>();
+              await deleteCubit.deleteTodo(todo.id!);
+
+              // If deletion failed, refresh the list to restore the todo
+              if (!deleteCubit.state.isSuccess) {
+                todoCubit.getTodos();
+              }
             },
             child: const Text('Delete'),
           ),

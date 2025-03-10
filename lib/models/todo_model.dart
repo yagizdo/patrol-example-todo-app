@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class Todo extends Equatable {
+  final String? id;
   final String? title;
   final String? description;
   final String? dueDate;
@@ -12,6 +13,7 @@ class Todo extends Equatable {
   final String? updatedAt;
 
   const Todo({
+    this.id,
     this.title,
     this.description,
     this.dueDate,
@@ -49,6 +51,7 @@ class Todo extends Equatable {
 
   @override
   List<Object?> get props => [
+        id,
         title,
         description,
         dueDate,
@@ -62,6 +65,7 @@ class Todo extends Equatable {
 
   factory Todo.fromJson(Map<String, dynamic> json) {
     return Todo(
+      id: json['_id'],
       title: json['title'],
       description: json['description'],
       dueDate: json['dueDate'],
