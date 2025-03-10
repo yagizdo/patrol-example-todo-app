@@ -39,5 +39,13 @@ void main() {
       expect(addTodoCubit.state.error, isNotEmpty);
       expect(addTodoCubit.state.error, 'Error');
     });
+
+    test('Should reset the state when reset is called', () {
+      addTodoCubit.reset();
+
+      expect(addTodoCubit.state.isSuccess, isFalse);
+      expect(addTodoCubit.state.isLoading, isFalse);
+      expect(addTodoCubit.state.error, isNull);
+    });
   });
 }
