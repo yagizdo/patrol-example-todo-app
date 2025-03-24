@@ -55,6 +55,10 @@ dependencies:
 
   # Utils
   file_picker: ^9.0.2
+  image_picker: ^1.1.2
+  permission_handler: ^11.4.0
+  permission_handler_platform_interface: ^4.3.0
+  app_settings: ^5.2.0
 
 dev_dependencies:
   flutter_test:

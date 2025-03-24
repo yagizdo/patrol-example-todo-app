@@ -9,6 +9,7 @@ This is a simple Todo application built with Flutter that allows users to:
 - Add new todos
 - Mark todos as completed
 - Delete todos
+- Upload files and take photos
 
 The app serves as an example of how to implement Patrol for integration testing in a Flutter application with a clean architecture approach.
 
@@ -25,6 +26,9 @@ lib/
 │   └── locator/     # Dependency injection setup
 ├── features/        # Feature modules
 │   ├── add_todo/    # Add todo feature
+│   │   ├── cubit/   # State management
+│   │   └── view/    # UI components
+│   ├── file_upload/ # File upload feature
 │   │   ├── cubit/   # State management
 │   │   └── view/    # UI components
 │   └── home/        # Home feature
@@ -48,9 +52,25 @@ The app includes integration tests using Patrol:
 
 ```
 integration_test/
-├── add_todo_test.dart    # Tests for adding todos
-├── example_test.dart     # Example tests
-└── test_bundle.dart      # Test bundle configuration
+├── add_todo/          # Tests for adding todos
+│   └── add_todo_test.dart
+├── delete_todo/       # Tests for deleting todos
+│   └── delete_todo_test.dart
+├── example/           # Example tests
+│   └── example_test.dart
+├── file_upload/       # Tests for file upload feature
+│   ├── file_upload_test.dart
+│   └── camera_test.dart (work in progress)
+└── test_bundle.dart   # Test bundle configuration
+```
+
+### Unit Tests
+
+```
+test/
+├── features/
+│   ├── add_todo/    # Unit tests for add todo feature
+│   └── todo/        # Unit tests for todo feature
 ```
 
 ## 🚀 Getting Started
@@ -60,6 +80,7 @@ integration_test/
 - Dart SDK (^3.6.0)
 - Android Studio / VS Code
 - Android SDK / Xcode (for iOS development)
+- LCOV (for code coverage reports)
 
 ### Clone the Repository
 
@@ -73,6 +94,27 @@ cd patrol_example_todo
 ```bash
 flutter pub get
 ```
+
+### Installing LCOV
+
+LCOV is required for generating code coverage reports. Install it based on your operating system:
+
+#### macOS
+```bash
+brew install lcov
+```
+
+#### Ubuntu/Debian
+```bash
+sudo apt-get install lcov
+```
+
+#### Windows
+Install using Chocolatey:
+```bash
+choco install lcov
+```
+Or download from [the LCOV GitHub repository](https://github.com/linux-test-project/lcov).
 
 ### Setting Up Patrol CLI
 
@@ -107,6 +149,12 @@ flutter run
 patrol test
 ```
 
+To run a specific test:
+
+```bash
+patrol test integration_test/file_upload/file_upload_test.dart
+```
+
 ### Code Coverage
 
 The project includes a script to generate and view code coverage reports:
@@ -137,6 +185,9 @@ To generate the report without opening it:
 - **get_it**: ^8.0.3 - Dependency injection
 - **freezed**: ^2.5.8 - Code generation for immutable classes
 - **equatable**: ^2.0.7 - Equality comparisons
+- **file_picker**: ^9.0.2 - File selection functionality
+- **image_picker**: ^1.1.2 - Camera and gallery image selection
+- **permission_handler**: ^11.4.0 - Handle runtime permissions
 
 ### Dev Dependencies
 - **patrol**: ^3.14.1 - Integration testing
@@ -152,3 +203,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - [Flutter Documentation](https://docs.flutter.dev/)
 - [Patrol Documentation](https://patrol.leancode.co/)
 - [Flutter Bloc Documentation](https://bloclibrary.dev/)
+- [File Picker Package](https://pub.dev/packages/file_picker)
+- [Image Picker Package](https://pub.dev/packages/image_picker)

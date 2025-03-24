@@ -24,7 +24,7 @@ void main() {
       await $.pumpAndSettle();
 
       // Verify we are on the file upload screen
-      expect(find.text('Dosya Yükleme'), findsOneWidget);
+      expect(find.text('File Upload'), findsOneWidget);
 
       // Tap on the pick file button
       await $(Key('pickFileButton')).tap();
@@ -52,9 +52,9 @@ void main() {
 
       await $.pumpAndSettle();
 
-      expect(find.text('Dosya Yükleme'), findsOneWidget);
+      expect(find.text('File Upload'), findsOneWidget);
 
-      expect(find.text('Seçilen Dosya: test-pdf.pdf'), findsOneWidget);
+      expect(find.text('Selected file: test-pdf.pdf'), findsOneWidget);
 
       // expect(find.text('This document is password protected'), findsOneWidget);
 

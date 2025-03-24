@@ -27,10 +27,11 @@ class _HomeViewState extends State<HomeView> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
+            child: ElevatedButton.icon(
               key: const Key('fileUploadButton'),
               onPressed: () => _navigateToFileUpload(context),
-              child: const Text('Dosya Yükleme'),
+              icon: const Icon(Icons.photo_camera),
+              label: const Text('Image Picker'),
             ),
           ),
           Expanded(

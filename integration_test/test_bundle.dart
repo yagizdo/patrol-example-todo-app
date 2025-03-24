@@ -9,7 +9,7 @@ import 'package:patrol/src/native/contracts/contracts.dart';
 import 'package:test_api/src/backend/invoker.dart';
 
 // START: GENERATED TEST IMPORTS
-import 'file_upload/file_upload_test.dart' as file_upload__file_upload_test;
+import 'file_upload/camera_test.dart' as file_upload__camera_test;
 // END: GENERATED TEST IMPORTS
 
 Future<void> main() async {
@@ -69,7 +69,7 @@ Future<void> main() async {
   });
 
   // START: GENERATED TEST GROUPS
-  group('file_upload.file_upload_test', file_upload__file_upload_test.main);
+  group('file_upload.camera_test', file_upload__camera_test.main);
   // END: GENERATED TEST GROUPS
 
   final dartTestGroup = await testExplorationCompleter.future;
